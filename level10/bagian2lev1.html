@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
+    <title>Game Edukasi - Bagian 2</title>
+    <style>
+        .letter:hover {
+            background-color: #007bff;
+            color: #fff;
+            transform: scale(1.2);
+            transition: all 0.2s;
+        }
+
+        .letter {
+            display: inline-block;
+            margin: 5px;
+            font-size: 24px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .letters-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+        }
+
+        .image-container img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body id="index-body-gatal" style="overflow: hidden;">
+    <div>
+        <!-- Link Home -->
+        <a href="/index.html" onclick="return confirmLeave()" style="display: inline-block; text-decoration: none; margin: 10px;">
+            <i class="fa fa-home" style="font-size: 45px; color: blue;"></i>
+        </a>
+    </div>
+    <div class="container text-center">
+        <h5>Nyawa: <span id="lives10">3</span></h5>
+    </div>
+    <div class="container d-flex justify-content-start align-items-center vh-100">
+        <div class="card shadow-lg" style="width: 40rem; position: relative; overflow: hidden;">
+            <div class="card-body text-center">
+                <h3 class="card-title text-primary animate__animated animate__fadeInDown">Bagian 2</h3>
+                <hr>
+                <!-- Gambar rumah -->
+                <div class="image-container animate__animated animate__fadeInUp animate__delay-1s">
+                    <img src="/assets/img/gatal.png" alt="Gambar Badan">
+                </div>
+                <!-- Petunjuk -->
+                <p class="card-text animate__animated animate__fadeInLeft animate__delay-2s">Tuliskan huruf yang sesuai dengan gambar di atas</p>
+                <!-- Tombol Play dan Stop -->
+                <div class="mb-3 animate__animated animate__fadeInRight animate__delay-3s">
+                    <button class="btn btn-success" id="playAudio">Putar Suara</button>
+                    <button class="btn btn-danger" id="stopAudio">Hentikan Suara</button>
+                </div>
+                <!-- Form Input -->
+                <div class="mt-3 animate__animated animate__fadeIn animate__delay-4s">
+                    <input type="text" class="form-control w-50 mx-auto text-center" id="answer" placeholder="Isi huruf di sini" maxlength="5">
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-primary" id="checkAnswer">Periksa Jawaban</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Benar-->
+    <div class="modal fade" id="correctAnswerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success">Jawaban Benar!</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <img src="/assets/img/jawaban/Benar.png" alt="">
+                    <p>Selamat! Jawaban kamu benar. Kamu akan diarahkan ke halaman berikutnya.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="nextPageButton">Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Salah-->
+    <div class="modal fade" id="wrongAnswerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Jawaban Salah!</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body align-items-center">
+                    <img src="/assets/img/jawaban/salah.png" alt="jawaban_salah" width="400" height="400" class="align-items-center">
+                    <p>Maaf, kamu salah. Coba lagi!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPetunjuk" autoplay><source src="/assets/sound/suara3.mp3" type="audio/mpeg"></audio>
+    <audio id="background-audio" src="/assets/sound/backsoundgame.mp3" loop></audio>
+    <audio id="benar" src="/assets/sound/jawaban/benar.mp3"></audio>
+    <audio id="salah" src="/assets/sound/jawaban/salah.mp3"></audio>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script>
+        const audio = document.getElementById('audioPetunjuk');
+        const playButton = document.getElementById('playAudio');
+        const stopButton = document.getElementById('stopAudio');
+        const backgroundAudio = document.getElementById("background-audio");
+        const benarAudio = document.getElementById("benar");
+        const salahAudio = document.getElementById("salah");
+        let lives = localStorage.getItem("lives10") ? parseInt(localStorage.getItem("lives10")) : 3;
+        const livesDisplay = document.getElementById("lives10");
+
+        // Perbarui tampilan nyawa saat halaman dimuat
+        livesDisplay.textContent = lives;
+        
+        window.onload = () => {
+            audio.play();
+            backgroundAudio.volume = 0.2;
+            backgroundAudio.play();
+        };
+
+        
+        playButton.addEventListener('click', () => {
+            audio.currentTime = 0; 
+            audio.play();
+        });
+        stopButton.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0; 
+        });
+
+        function confirmLeave() {
+            return confirm("Apakah kamu yakin ingin meninggalkan halaman ini?");
+        }
+    </script>
+    <script>
+        document.getElementById("checkAnswer").addEventListener("click", function () {
+            const correctAnswer = "gatal"; // Jawaban benar
+            const userAnswer = document.getElementById("answer").value.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                $("#correctAnswerModal").modal("show");
+                benarAudio.play();
+
+                // Simpan nyawa ke localStorage sebelum berpindah halaman
+                localStorage.setItem("lives10", lives);
+
+                document.getElementById("nextPageButton").addEventListener("click", function () {
+                    window.location.href = "bagian3lev1.html";
+                });
+            } else {
+                lives--; // Kurangi nyawa jika salah
+                livesDisplay.textContent = lives; // Perbarui tampilan nyawa
+                localStorage.setItem("lives10", lives); // Simpan nyawa ke localStorage
+
+                if (lives > 0) {
+                    $("#wrongAnswerModal").modal("show");
+                    salahAudio.play();
+                } else {
+                    alert("Game Over! Nyawa kamu habis.");
+                    localStorage.setItem("lives10", 3); // Reset nyawa ke 3 untuk permainan baru
+                    window.location.href = "/index.html"; // Arahkan kembali ke halaman awal
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
